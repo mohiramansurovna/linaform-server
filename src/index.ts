@@ -12,7 +12,7 @@ dotenv.config();
 const app = express();
 
 app.use(cors({
-    origin: 'https://mohiramansurovna.github.io/linaform-client',
+    origin: ['http://localhost:4173','https://mohiramansurovna.github.io'],
     credentials: true,
 }));
 app.use(express.json());
