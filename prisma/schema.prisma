@@ -1,0 +1,75 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String         @id @default(uuid())
+  username     String
+  email        String         @unique
+  password     String
+  createdAt    DateTime       @default(now())
+  RefreshToken RefreshToken[]
+  likes        Like[]
+  Comment      Comment[]
+  Note         Note[]
+  followers    User[]         @relation("UserFollows")
+  following    User[]         @relation("UserFollows")
+}
+
+model Tag {
+  id    String @id @default(uuid())
+  label String @unique
+  notes Note[]
+}
+
+model Note {
+  id          String    @id @default(uuid())
+  title       String
+  description String?
+  content     Json?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  publishedAt DateTime?
+  isPublished Boolean   @default(false)
+  user        User      @relation(fields: [userId], references: [id])
+  userId      String
+  tags        Tag[]
+  comments    Comment[]
+  likes       Like[]
+  views       Int       @default(0)
+
+  @@unique([id, userId])
+}
+
+model RefreshToken {
+  id        String   @id @default(uuid())
+  token     String   @unique
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  expiresAt DateTime
+}
+
+model Comment {
+  id        String   @id @default(uuid())
+  content   String
+  noteId    String
+  userId    String
+  createdAt DateTime @default(now())
+  edited    Boolean  @default(false)
+  note      Note     @relation(fields: [noteId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id])
+}
+
+model Like {
+  id     String @id @default(uuid())
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
+  note   Note   @relation(fields: [noteId], references: [id], onDelete: Cascade)
+  noteId String
+}

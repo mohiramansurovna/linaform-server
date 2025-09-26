@@ -1,0 +1,11 @@
+🚀 Deployment Notes
+🔧 When deploying (e.g. to Render, Railway, Fly.io):
+Add build script (tsc) and deploy the dist/ directory.
+
+Add .env variables on the host (e.g., DATABASE_URL, JWT_SECRET).
+
+Use start script: "start": "node dist/index.js"
+
+Make sure to run npx prisma generate and npx prisma migrate deploy on the host.
+
+If using SQLite, it’s better for small apps or single-user tools — otherwise consider PostgreSQL.
