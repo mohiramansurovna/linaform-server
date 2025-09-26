@@ -82,7 +82,7 @@ router.post(
         res.cookie('refreshToken', refreshToken, {
             httpOnly: true,
             secure: true,
-            sameSite: 'strict',
+            sameSite: 'none',
             expires,
         });
 
@@ -115,7 +115,7 @@ router.post('/logout', async (req: AppRequest, res: AppResponse) => {
     res.clearCookie('refreshToken', {
         httpOnly: true,
         secure: true,
-        sameSite: 'strict',
+        sameSite: 'none',
     });
     res.status(200).json({message: 'Logged out successfully'});
 });
@@ -160,7 +160,7 @@ router.post(
         res.cookie('refreshToken', newRefreshToken, {
             httpOnly: true,
             secure: true,
-            sameSite: 'strict',
+            sameSite: 'none',
             expires: newExpiresAt,
         });
 
